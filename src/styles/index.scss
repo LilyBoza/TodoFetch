@@ -11,3 +11,76 @@
     import 'relative/path/to/stylesheet.scss';
 
 */
+body{
+    background-image:url(https://fondosmil.com/fondo/1806.jpg) ;
+}
+.principal{
+    text-align: center;
+}
+
+.principal h1{
+    color: #f08080;
+}
+
+.principal h3{
+    color: #f08080;
+}
+
+
+.home-header{
+    min-height: 30vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+
+}
+
+// para el color del borde del todo
+.wrapper{
+    background: #f08080;
+    padding: 10px;
+}
+
+.Input-wrapper{
+    // display: flex;
+    justify-content: space-between;
+    width: 300px;
+    align-items: center;
+    margin: 0;
+}
+
+// para definirle el tamaño al input y asignarle un borde blanco
+.Input-wrapper Input{
+    border: 0%;
+    width: 300px;
+    height: 40px;
+    padding: 6px;
+    border: 1px solid white;
+}
+
+// para definirle el tamaño al input y el borde blanco de cada todo
+.window{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 10px;
+    width: 300px;
+    height: 40;
+    border: 1px solid white;
+    padding: 10px;
+    background: #ffeae9;
+}
+p{
+    margin: 0;   
+}
+// se le da estilo al boton de cada todo
+.window button{
+    border-radius: 5%;
+    border: 0;
+    padding: 2px;
+    background-color: white;
+    width: 20px;
+    height: 30px;
+
+}

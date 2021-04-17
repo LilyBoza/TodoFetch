@@ -1,52 +1,45 @@
 import React, { useState } from "react";
 
-//create your first component
 export function Home() {
 	const FetchUrl =
 		"https://assets.breatheco.de/apis/fake/todos/user/usuarioLilianaPBN";
+	const [currentItem, setCurrentItem] = useState();
 	const [todos, setTodos] = useState([]);
 
-	const addTodo = async e => {
-		if (e.key == "Enter") {
-			if (e.target === "") {
-				alert("ingrese la tarea");
-			} else {
-				const NuevoTodo = { label: e.target.value, done: false };
-				await fetch(FetchUrl, {
-					method: "PUT",
-					body: JSON.stringify([...todos, NuevoTodo]),
-					headers: { "Content-Type": "application/json" }
-				})
-					.then(res => res.json())
-					.then(data => console.log([data]));
+	const onChangeHandler = e => {
+		setCurrentItem(e.target.value);
+	};
 
-				await fetch(FetchUrl)
-					.then(res => res.json())
-					.then(data => {
-						setTodos(data);
-						e.target.value = " ";
-					});
-			}
+	const addTodo = async e => {
+		if (e.key == "Enter" && e.target.value !== "") {
+			const NuevoTodo = { label: currentItem, done: false };
+			// Se hace el put
+			await fetch(FetchUrl, {
+				method: "PUT",
+				body: JSON.stringify([...todos, NuevoTodo]),
+				headers: { "Content-Type": "application/json" }
+			})
+				.then(res => res.json())
+				.then(data => console.log([data]));
+			// Se hace el get para obtener el todo
+			await fetch(FetchUrl)
+				.then(res => res.json())
+				.then(data => {
+					setTodos(data);
+					setCurrentItem("");
+				});
 		}
 	};
 
-	//Función de eliminar todo sin API
-	// const delTodo = key => {
-	// 	setTodos(
-	// 		todos.filter((item, index) => {
-	// 			return key !== index ? item : null;
-	// 		})
-	// 	);
-	// };
-
 	const delTodo = async key => {
+		// Como me quedaba un todo, lo fuerzo a que me quede la lista en blanco
 		if (todos.length === 1) {
 			setTodos([]);
 		} else {
 			const listaNueva = todos.filter((item, index) => {
 				return key !== index ? item : null;
 			});
-
+			// Se hace le put
 			await fetch(FetchUrl, {
 				method: "PUT",
 				body: JSON.stringify(listaNueva),
@@ -54,7 +47,7 @@ export function Home() {
 			})
 				.then(res => res.json())
 				.then(data => console.log([data]));
-
+			// Se hace el get para eliminar un todo
 			await fetch(FetchUrl)
 				.then(res => res.json())
 				.then(data => {
@@ -65,19 +58,34 @@ export function Home() {
 	};
 
 	return (
-		<div className="text-center mt-5">
+		<div className="principal">
 			<h1>TodoList</h1>
-			<input onKeyDown={addTodo} />
-			<ul>
-				{todos.map((todo, key) => {
-					return (
-						<li key={key}>
-							{todo.label}
-							<button onClick={() => delTodo(key)}>x</button>
-						</li>
-					);
-				})}
-			</ul>
+			<h3>Ingrese las tareas por hacer</h3>
+			<header className="home-header">
+				<div className="wrapper">
+					<div className="Input-wrapper">
+						<input
+							value={currentItem}
+							onKeyPress={addTodo}
+							onChange={onChangeHandler}
+							tye="text"
+							placeholder="¿Que necesita hacer?"
+						/>
+						<div>
+							{todos.map((todo, key) => {
+								return (
+									<div className="window" key={key}>
+										{todo.label}
+										<button onClick={() => delTodo(key)}>
+											x
+										</button>
+									</div>
+								);
+							})}
+						</div>
+					</div>
+				</div>
+			</header>
 		</div>
 	);
 }
